@@ -1,0 +1,13 @@
+---
+  stock-levels:
+    Credentials:
+      mysql:
+        username: root
+        password: my-secret-pw
+    Settings:
+      environment: dev
+      mysql:
+        db_name: StockService
+      statsd:
+        host: statsd
+        port: 8125

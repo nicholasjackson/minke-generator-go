@@ -1,0 +1,22 @@
+FROM golang:latest
+
+EXPOSE 8080
+
+# Create directory for server files
+RUN mkdir /<%= SERVICE_NAME %>
+
+# Install supervisor and consul-template
+RUN apt-get update
+RUN echo y| apt-get install wget tar supervisor
+RUN wget https://github.com/hashicorp/consul-template/releases/download/v0.10.0/consul-template_0.10.0_linux_386.tar.gz
+RUN tar -xvzf consul-template_0.10.0_linux_386.tar.gz
+RUN mv consul-template_0.10.0_linux_386/consul-template /bin/consul-template
+
+# Configure consul-template supervisor and nginx
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY config.ctmpl /<%= SERVICE_NAME %>/config.ctmpl
+
+# Copy binary
+COPY <%= APPLICATION_NAME %> /<%= SERVICE_NAME %>/<%= APPLICATION_NAME %>
+
+CMD ["/usr/bin/supervisord", "-c","/etc/supervisor/conf.d/supervisord.conf"]

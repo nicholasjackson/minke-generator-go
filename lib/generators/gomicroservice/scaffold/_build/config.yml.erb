@@ -1,0 +1,33 @@
+---
+application_name: '<%= SERVICE_NAME %>'
+namespace: '<%= NAMESPACE %>'
+docker_registry:
+  url: <%%= ENV['DOCKER_REGISTRY_URL'] %>
+  user: <%%= ENV['DOCKER_REGISTRY_USER'] %>
+  password: <%%= ENV['DOCKER_REGISTRY_PASS'] %>
+  email: <%%= ENV['DOCKER_REGISTRY_EMAIL'] %>
+  namespace: <%%= ENV['DOCKER_NAMESPACE'] %>
+docker:
+  docker_file: './dockerfile/<%= SERVICE_NAME %>/'
+  compose_file: './dockercompose/<%= SERVICE_NAME %>/docker-compose.yml'
+run:
+  consul_loader:
+    enabled: true
+    config_file: './consul_keys.yml'
+    url: <%%= "http://#{ENV['DOCKER_IP']}:9500" %>
+cucumber:
+  consul_loader:
+    enabled: true
+    config_file: './consul_keys.yml'
+    url: <%%= "http://#{ENV['DOCKER_IP']}:9500" %>
+  health_check:
+    enabled: true
+    url: <%%= "http://#{ENV['DOCKER_IP']}:8091/v1/health" %>
+after_build:
+  copy_assets:
+    -
+      from: <%= APPLICATION_LOCATION %>
+      to: './dockerfile/<%= SERVICE_NAME %>'
+    -
+      from: './swagger_spec/swagger.yml'
+      to: './dockerfile/<%= SERVICE_NAME %>/swagger_spec'
