@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec /usr/bin/consul-template -consul=$CONSUL -template "/<%= application_name %>/config.ctmpl:/<%= application_name %>/config.json:killall <%= application_name %>"

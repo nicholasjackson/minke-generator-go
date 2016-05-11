@@ -4,4 +4,4 @@ gem "rake"
 gem "cucumber", "~> 1.3.10"
 gem "cucumber-rest-api", "= 0.3"
 gem 'minke'
-gem 'minke-generator-template' # Update this to the name of your gem
+gem 'minke-generator-go'

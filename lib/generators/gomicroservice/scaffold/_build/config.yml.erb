@@ -1,6 +1,7 @@
 ---
-application_name: '<%= SERVICE_NAME %>'
-namespace: '<%= NAMESPACE %>'
+application_name: '<%= application_name %>'
+namespace: '<%= namespace %>'
+generator_name: minke-generator-go
 docker_registry:
   url: <%%= ENV['DOCKER_REGISTRY_URL'] %>
   user: <%%= ENV['DOCKER_REGISTRY_USER'] %>
@@ -8,13 +9,16 @@ docker_registry:
   email: <%%= ENV['DOCKER_REGISTRY_EMAIL'] %>
   namespace: <%%= ENV['DOCKER_NAMESPACE'] %>
 docker:
-  docker_file: './dockerfile/<%= SERVICE_NAME %>/'
-  compose_file: './dockercompose/<%= SERVICE_NAME %>/docker-compose.yml'
+  build_image: 'golang:latest'
+  docker_file: './dockerfile/<%= application_name %>/'
+  compose_file: './dockercompose/<%= application_name %>/docker-compose.yml'
+fetch:
 run:
   consul_loader:
     enabled: true
     config_file: './consul_keys.yml'
     url: <%%= "http://#{ENV['DOCKER_IP']}:9500" %>
+test:
 cucumber:
   consul_loader:
     enabled: true
@@ -26,8 +30,8 @@ cucumber:
 after_build:
   copy_assets:
     -
-      from: <%= APPLICATION_LOCATION %>
-      to: './dockerfile/<%= SERVICE_NAME %>'
+      from: <%= application_location %>
+      to: './dockerfile/<%= application_name %>'
     -
       from: './swagger_spec/swagger.yml'
-      to: './dockerfile/<%= SERVICE_NAME %>/swagger_spec'
+      to: './dockerfile/<%= application_name %>/swagger_spec'
