@@ -15,7 +15,7 @@ ADD config.ctmpl /<%= application_name %>/config.ctmpl
 
 # Add server files
 ADD swagger_spec /swagger
-ADD testservice /<%= application_name %>/<%= application_name %>
+ADD <%= application_name %> /<%= application_name %>/<%= application_name %>
 
 RUN chmod 755 /<%= application_name %>/<%= application_name %>
 

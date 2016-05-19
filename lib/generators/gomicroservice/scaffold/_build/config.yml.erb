@@ -3,35 +3,44 @@ application_name: '<%= application_name %>'
 namespace: '<%= namespace %>'
 generator_name: minke-generator-go
 docker_registry:
-  url: <%%= ENV['DOCKER_REGISTRY_URL'] %>
-  user: <%%= ENV['DOCKER_REGISTRY_USER'] %>
-  password: <%%= ENV['DOCKER_REGISTRY_PASS'] %>
-  email: <%%= ENV['DOCKER_REGISTRY_EMAIL'] %>
-  namespace: <%%= ENV['DOCKER_NAMESPACE'] %>
+  url: <%= ENV['DOCKER_REGISTRY_URL'] %>
+  user: <%= ENV['DOCKER_REGISTRY_USER'] %>
+  password: <%= ENV['DOCKER_REGISTRY_PASS'] %>
+  email: <%= ENV['DOCKER_REGISTRY_EMAIL'] %>
+  namespace: <%= ENV['DOCKER_NAMESPACE'] %>
 docker:
   build_image: 'golang:latest'
-  docker_file: './dockerfile/<%= application_name %>/'
-  compose_file: './dockercompose/<%= application_name %>/docker-compose.yml'
+  application_docker_file: './dockerfile/<%= application_name %>/'
+  application_compose_file: './dockercompose/<%= application_name %>/docker-compose.yml'
 fetch:
+build:
+  post:
+    copy:
+      -
+        from: '../<%= application_name %>'
+        to: './dockerfile/<%= application_name %>'
+      -
+        from: './swagger_spec/swagger.yml'
+        to: './dockerfile/<%= application_name %>/swagger_spec'
 run:
-  consul_loader:
-    enabled: true
-    config_file: './consul_keys.yml'
-    url: <%%= "http://#{ENV['DOCKER_IP']}:9500" %>
+  pre:
+    consul_loader:
+      config_file: './consul_keys.yml'
+      url:
+        address: consul
+        port: 8500
+        type: private
 test:
 cucumber:
-  consul_loader:
-    enabled: true
-    config_file: './consul_keys.yml'
-    url: <%%= "http://#{ENV['DOCKER_IP']}:9500" %>
-  health_check:
-    enabled: true
-    url: <%%= "http://#{ENV['DOCKER_IP']}:8091/v1/health" %>
-after_build:
-  copy_assets:
-    -
-      from: <%= application_location %>
-      to: './dockerfile/<%= application_name %>'
-    -
-      from: './swagger_spec/swagger.yml'
-      to: './dockerfile/<%= application_name %>/swagger_spec'
+  pre:
+    consul_loader:
+      config_file: './consul_keys.yml'
+      url:
+        address: consul
+        port: 8500
+        type: private
+    health_check:
+      address: <%= application_name %>
+      port: 8001
+      path: /v1/health
+      type: private

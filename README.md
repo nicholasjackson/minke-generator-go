@@ -1,12 +1,10 @@
-# Minke::Generator::Template
+# Minke::Generators::GoMicroservice
 
-This is an example generator for creating Minkie plugins, clone this template and update with your own specific stuff.
+.
 
-## Available variables for template
-- SERVICE_NAME: The name of the service
-- APPLICATION_NAME: The name of the application executable
-- NAMESPACE: Namespace of the application
-- APPLICATION_LOCATION: File path for the build artefacts
+## Available variables for template (erb style)
+- <%= application_name %>: The name of the application executable
+- <%= namespace %>: Namespace of the application
 
 ## Testing your template
 ```
