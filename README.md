@@ -1,6 +1,8 @@
 # Minke::Generators::GoMicroservice
 
-.
+[![Build Status](https://travis-ci.org/nicholasjackson/minke-generator-go.svg?branch=master)](https://travis-ci.org/nicholasjackson/minke-generator-go)  
+
+This generator creates a REST API microservice in Golang.
 
 ## Available variables for template (erb style)
 - <%= application_name %>: The name of the application executable
