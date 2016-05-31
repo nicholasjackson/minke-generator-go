@@ -4,8 +4,8 @@ gem "rake"
 gem 'cucumber-api', '~> 0.3'
 gem 'nokogiri'
 
-#gem 'minke'
-#gem 'minke-generator-go'
+gem 'minke'
+gem 'minke-generator-go'
 
-gem 'minke', :path => '/Users/nicj/Developer/gems/minke'
-gem 'minke-generator-go', :path => '/Users/nicj/Developer/gems/minke-generator-go'
+#gem 'minke', :path => '/Users/nicj/Developer/gems/minke'
+#gem 'minke-generator-go', :path => '/Users/nicj/Developer/gems/minke-generator-go'
