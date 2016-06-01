@@ -13,6 +13,9 @@ docker:
   application_docker_file: './dockerfile/<%= application_name %>/'
   application_compose_file: './dockercompose/<%= application_name %>/docker-compose.yml'
 fetch:
+  enabled: true
+test:
+  enabled: true
 build:
   post:
     copy:
@@ -30,7 +33,6 @@ run:
         address: consul
         port: 8500
         type: private
-test:
 cucumber:
   pre:
     consul_loader:

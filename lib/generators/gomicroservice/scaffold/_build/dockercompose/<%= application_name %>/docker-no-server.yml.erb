@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   consul:
     image: progrium/consul
@@ -13,13 +14,16 @@ services:
     expose:
       - "8125/udp"
     environment:
-      - "SERVICE_NAME=statsd"
+      - "SERVICE_8125_NAME=statsd-8125"
   registrator:
     image: 'gliderlabs/registrator:latest'
     links:
       - consul:consul
-    environment:
-      - "SERVICE_NAME=statsd"
     command: '-internal -tags=dev consul://consul:8500'
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock'
+  syslog:
+    image: 'factorish/syslog'
+    command: '-t udp'
+    environment:
+      - "SERVICE_514_NAME=syslog-514"

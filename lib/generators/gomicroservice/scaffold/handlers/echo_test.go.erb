@@ -27,6 +27,7 @@ func echoTestSetup(t *testing.T) {
 	err := g.Provide(
 		&inject.Object{Value: EchoDependencies},
 		&inject.Object{Value: echoStatsDMock, Name: "statsd"},
+		&inject.Object{Value: log.New(os.Stdout, "tester", log.Lshortfile)},
 	)
 
 	if err != nil {

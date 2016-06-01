@@ -25,6 +25,7 @@ func healthTestSetup(t *testing.T) {
 	err := g.Provide(
 		&inject.Object{Value: HealthDependencies},
 		&inject.Object{Value: healthStatsDMock, Name: "statsd"},
+		&inject.Object{Value: log.New(os.Stdout, "tester", log.Lshortfile)},
 	)
 
 	if err != nil {

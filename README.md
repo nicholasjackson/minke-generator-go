@@ -2,41 +2,62 @@
 
 [![Build Status](https://travis-ci.org/nicholasjackson/minke-generator-go.svg?branch=master)](https://travis-ci.org/nicholasjackson/minke-generator-go)  
 
-This generator creates a REST API microservice in Golang.
+This generator creates a REST API Microservice in Go for the Minke build and test system.
 
-## Available variables for template (erb style)
-- <%= application_name %>: The name of the application executable
-- <%= namespace %>: Namespace of the application
+For information on Minke please see the documentation [http://nicholasjackson.github.io/minke/](http://nicholasjackson.github.io/minke/).
 
-## Testing your template
-```
-$ bundle
-```
-
-Test your generator by running ...
-```
-$ bundle exec minke -g minke-generator-template -o ../temp -a tester -n mynamespace
-```
+## Available variables for templates (erb style)
+| Variable                | Description                            |
+| ----------------------- |                                        |
+| <%= application_name %> | The name of the application executable |
+| <%= namespace %>        | Namespace of the application           |
+| <%= src_root %>         | Source root of the application         |
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'minke-generator-template'
+gem 'minke'
+gem 'minke-generator-go'
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Or install it yourself:
 
-    $ gem install minke-generator-template
+```
+$ gem install minke
+$ gem install minke-generator-go
+
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+To scaffold a new service run:
+
+```bash
+$ minke -g minke-generator-go -o $GOPATH/src/github.com/nicholasjackson/helloworld
+  -a helloworld -n github.com/nicholasjackson
+```
+
+## Build and test with Docker
+To run a build with a Docker container, to execute the functional and unit tests you can use the following commands.  Please see the main Minke documentation for more information [http://nicholasjackson.github.io/minke/](http://nicholasjackson.github.io/minke/).
+
+### Build Application Code and Execute Unit tests
+```bash
+$ cd _build
+$ bundle
+$ rake app:test
+```
+
+### Build a Docker image and execute functional tests with Cucumber
+```bash
+$ rake app:build_image
+$ rake app:cucumber
+```
 
 ## Development
 
@@ -46,7 +67,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/minke-generator-template. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nicholasjackson/minke-generator-netmvc. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
