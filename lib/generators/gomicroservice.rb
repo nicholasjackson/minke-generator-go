@@ -23,16 +23,7 @@ module Minke
         bs.image = 'golang:latest'
         bs.env = ['CGO_ENABLED=0']
         bs.binds = ["#{ENV['GOPATH']}/src:/go/src"]
-        # working directory is added via a class patch to enable lazy load
-      end
-
-      # we need lazy evaluation of this property
-      class << config.build_settings.docker_settings
-        def working_directory
-          dir = File.expand_path('../.')
-          gopath = "#{ENV['GOPATH']}"
-          "/go" + dir.gsub(gopath,'')
-        end
+        bs.working_directory = '/go/src/<%= namespace %>/<%= application_name %>'
       end
 
       Minke::Generators.register config
