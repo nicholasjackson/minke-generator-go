@@ -32,7 +32,7 @@ run:
       url:
         address: consul
         port: 8500
-        type: private
+        type: bridge
 cucumber:
   pre:
     consul_loader:
@@ -40,9 +40,9 @@ cucumber:
       url:
         address: consul
         port: 8500
-        type: private
+        type: bridge
     health_check:
       address: <%= application_name %>
       port: 8001
       path: /v1/health
-      type: private
+      type: bridge
