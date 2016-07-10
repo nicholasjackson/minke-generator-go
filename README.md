@@ -1,3 +1,4 @@
+![Minke](http://minke.rocks/img/minke_logo.png)
 # Minke::Generators::GoMicroservice
 
 [![Build Status](https://travis-ci.org/nicholasjackson/minke-generator-go.svg?branch=master)](https://travis-ci.org/nicholasjackson/minke-generator-go)  
@@ -8,7 +9,7 @@ For information on Minke please see the documentation [http://nicholasjackson.gi
 
 ## Available variables for templates (erb style)
 | Variable                | Description                            |
-| ----------------------- |                                        |
+| ----------------------- | -------------------------------------- |
 | <%= application_name %> | The name of the application executable |
 | <%= namespace %>        | Namespace of the application           |
 | <%= src_root %>         | Source root of the application         |
