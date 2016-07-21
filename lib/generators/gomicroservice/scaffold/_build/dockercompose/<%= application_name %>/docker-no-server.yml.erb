@@ -1,12 +1,6 @@
 version: '2'
 
 services:
-  consul:
-    image: progrium/consul
-    ports:
-      - "::8500"
-    hostname: node1
-    command: "-server -bootstrap -ui-dir /ui"
   statsd:
     image: 'hopsoft/graphite-statsd:latest'
     ports:

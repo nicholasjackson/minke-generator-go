@@ -26,23 +26,21 @@ build:
         from: './swagger_spec/swagger.yml'
         to: './dockerfile/<%= application_name %>/swagger_spec'
 run:
-  pre:
-    consul_loader:
-      config_file: './consul_keys.yml'
-      url:
-        address: consul
-        port: 8500
-        type: bridge
-cucumber:
-  pre:
-    consul_loader:
-      config_file: './consul_keys.yml'
-      url:
-        address: consul
-        port: 8500
-        type: bridge
-    health_check:
-      address: <%= application_name %>
-      port: 8001
-      path: /v1/health
+  consul_loader:
+    config_file: './consul_keys.yml'
+    url:
+      address: consul
+      port: 8500
       type: bridge
+cucumber:
+  consul_loader:
+    config_file: './consul_keys.yml'
+    url:
+      address: consul
+      port: 8500
+      type: bridge
+  health_check:
+    address: <%= application_name %>
+    port: 8001
+    path: /v1/health
+    type: bridge
