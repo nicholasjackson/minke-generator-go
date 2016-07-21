@@ -14,35 +14,18 @@ For information on Minke please see the documentation [http://nicholasjackson.gi
 | <%= namespace %>        | Namespace of the application           |
 | <%= src_root %>         | Source root of the application         |
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'minke'
-gem 'minke-generator-go'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself:
-
-```
-$ gem install minke
-$ gem install minke-generator-go
-
-```
-
-## Usage
-
-To scaffold a new service run:
-
+### Generate a new service
 ```bash
-$ minke -g minke-generator-go -o $GOPATH/src/github.com/nicholasjackson/helloworld
-  -a helloworld -n github.com/nicholasjackson
+$ mkdir service
+$ cd service
+$ curl -L -s get.minke.rocks | bash -s ' -g minke-generator-go -o $(pwd) -n nicholasjackson/service -a service'
 ```
+
+**NOTE:** replace *nicholasjackson/service* with your github user and application name this needs to correspond to the input namespace you would use in your go code.
+
+You do not need to create this folder inside your GOPATH as all builds are run localised in a Docker container however for an effective workflow.  It is very beneficial to follow the standard go conventions.
+
+The generator uses GO vendoring and all sub packages will be cached in the vendor folder.
 
 ## Build and test with Docker
 To run a build with a Docker container, to execute the functional and unit tests you can use the following commands.  Please see the main Minke documentation for more information [http://nicholasjackson.github.io/minke/](http://nicholasjackson.github.io/minke/).
@@ -50,14 +33,14 @@ To run a build with a Docker container, to execute the functional and unit tests
 ### Build Application Code and Execute Unit tests
 ```bash
 $ cd _build
-$ bundle
-$ rake app:test
+$ ./minke.sh rake app:test
 ```
 
 ### Build a Docker image and execute functional tests with Cucumber
 ```bash
-$ rake app:build_image
-$ rake app:cucumber
+$ ./minke.sh rake app:build_image
+$ ./minke.sh rake app:cucumber
+```
 ```
 
 ## Development
