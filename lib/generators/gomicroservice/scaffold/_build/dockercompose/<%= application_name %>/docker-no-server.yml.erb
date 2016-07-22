@@ -11,8 +11,6 @@ services:
       - "SERVICE_8125_NAME=statsd-8125"
   registrator:
     image: 'gliderlabs/registrator:latest'
-    links:
-      - consul:consul
     command: '-internal -tags=dev consul://consul:8500'
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock'
