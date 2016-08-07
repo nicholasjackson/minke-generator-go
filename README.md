@@ -2,6 +2,7 @@
 # Minke::Generators::GoMicroservice
 
 [![Build Status](https://travis-ci.org/nicholasjackson/minke-generator-go.svg?branch=master)](https://travis-ci.org/nicholasjackson/minke-generator-go)  
+[![Stories in Ready](https://badge.waffle.io/nicholasjackson/minke-generator-go.svg?label=ready&title=Ready)](http://waffle.io/nicholasjackson/minke-generator-go)  
 
 This generator creates a REST API Microservice in Go for the Minke build and test system.
 
