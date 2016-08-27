@@ -1,0 +1,16 @@
+package: <%= namespace %>/<%= application_name %>
+import:
+- package: github.com/alexcesaro/statsd
+  version: ^2.0.0
+- package: github.com/asaskevich/govalidator
+  version: ^4.0.0
+- package: github.com/facebookgo/inject
+- package: github.com/gorilla/context
+  version: ^1.1.0
+- package: github.com/gorilla/pat
+- package: github.com/stretchr/testify
+  version: ^1.1.3
+  subpackages:
+  - mock
+testImport:
+- package: github.com/alecthomas/assert

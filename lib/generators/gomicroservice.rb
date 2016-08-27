@@ -14,17 +14,16 @@ module Minke
       config.build_settings = Minke::Generators::BuildSettings.new
 
       config.build_settings.build_commands = Minke::Generators::BuildCommands.new.tap do |bc|
-        bc.fetch = [['/bin/bash', '-c', "export GOPATH=/packages && go get -v -d -t $(go list -f '{{ join .Imports \"\\n\" }}' ./... | grep -v '<%= namespace %>/<%= application_name %>') && echo Downloaded packages"]]
-        bc.build = [['/bin/bash', '-c', 'go build -a -installsuffix cgo -ldflags \'-s\' -o <%= application_name %>']]
-        bc.test = [['/bin/bash', '-c', 'go test $(go list ./... | grep -v /vendor/)']]
+        bc.fetch = [['/bin/sh', '-c', 'glide update']]
+        bc.build = [['/bin/sh', '-c', 'go build -a -installsuffix cgo -ldflags \'-s\' -o <%= application_name %>']]
+        bc.test = [['/bin/sh', '-c', 'go test $(go list ./... | grep -v /vendor/)']]
       end
 
       config.build_settings.docker_settings = Minke::Generators::DockerSettings.new.tap do |bs|
         bs.image = 'golang:latest'
         bs.env = ['CGO_ENABLED=0']
         bs.binds = [
-          "<%= src_root %>:/go/src/<%= namespace %>/<%= application_name %>",
-          "<%= src_root %>/vendor:/packages/src"
+          "<%= src_root %>:/go/src/<%= namespace %>/<%= application_name %>"
         ]
         bs.working_directory = '/go/src/<%= namespace %>/<%= application_name %>'
       end
