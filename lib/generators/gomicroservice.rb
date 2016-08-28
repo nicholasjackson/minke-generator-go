@@ -20,7 +20,7 @@ module Minke
       end
 
       config.build_settings.docker_settings = Minke::Generators::DockerSettings.new.tap do |bs|
-        bs.image = 'nicholasjackson/minke-generator-go'
+        bs.image = 'nicholasjackson/minke-generator-go:latest'
         bs.env = ['CGO_ENABLED=0']
         bs.binds = [
           "<%= src_root %>:/go/src/<%= namespace %>/<%= application_name %>"
