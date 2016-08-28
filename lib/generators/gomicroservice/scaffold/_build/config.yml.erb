@@ -9,7 +9,6 @@ docker_registry:
   email: <%= ENV['DOCKER_REGISTRY_EMAIL'] %>
   namespace: <%= ENV['DOCKER_NAMESPACE'] %>
 docker:
-  build_image: 'golang:latest'
   application_docker_file: './dockerfile/<%= application_name %>/'
   application_compose_file: './dockercompose/<%= application_name %>/docker-compose.yml'
 fetch:
