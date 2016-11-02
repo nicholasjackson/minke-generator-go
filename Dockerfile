@@ -6,4 +6,4 @@ RUN apk update && \
     apk add git
 
 # install Glide
-RUN curl https://glide.sh/get | sh
+RUN go get -u github.com/Masterminds/glide
