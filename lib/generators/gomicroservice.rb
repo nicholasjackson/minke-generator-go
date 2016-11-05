@@ -23,7 +23,8 @@ module Minke
         bs.image = 'nicholasjackson/minke-generator-go:latest'
         bs.env = ['CGO_ENABLED=0']
         bs.binds = [
-          "<%= src_root %>:/go/src/<%= namespace %>/<%= application_name %>"
+          "<%= src_root %>:/go/src/<%= namespace %>/<%= application_name %>",
+          "#{ENV['HOME']}/.glide:/root/.glide"
         ]
         bs.working_directory = '/go/src/<%= namespace %>/<%= application_name %>'
       end
