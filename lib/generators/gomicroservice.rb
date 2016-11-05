@@ -14,7 +14,7 @@ module Minke
       config.build_settings = Minke::Generators::BuildSettings.new
 
       config.build_settings.build_commands = Minke::Generators::BuildCommands.new.tap do |bc|
-        bc.fetch = [['/bin/sh', '-c', 'glide update']]
+        bc.fetch = [['/bin/sh', '-c', 'glide install']]
         bc.build = [['/bin/sh', '-c', 'go build -a -installsuffix cgo -ldflags \'-s\' -o <%= application_name %>']]
         bc.test = [['/bin/sh', '-c', 'go test $(go list ./... | grep -v /vendor/)']]
       end
