@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM golang:1.8rc3-alpine
 
 # install curl
 RUN apk update && \
