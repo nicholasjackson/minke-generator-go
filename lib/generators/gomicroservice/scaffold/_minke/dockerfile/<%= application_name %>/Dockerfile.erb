@@ -11,7 +11,7 @@ ADD config.ctmpl /<%= application_name %>/config.ctmpl
 ADD entrypoint.sh /entrypoint.sh
 
 # Add server files
-ADD testapp /<%= application_name %>/<%= application_name %>
+ADD <%= application_name %> /<%= application_name %>/<%= application_name %>
 
 RUN chmod 755 /<%= application_name %>/<%= application_name %>
 RUN chmod 755 /entrypoint.sh
