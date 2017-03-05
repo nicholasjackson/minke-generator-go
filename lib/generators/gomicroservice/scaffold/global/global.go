@@ -6,14 +6,16 @@ import (
 	"os"
 )
 
+// ConfigStruct defines a config object usually created on startup
 type ConfigStruct struct {
-	StatsDServerIP string `json:"stats_d_server"`
-	SysLogIP       string `json:"syslog_server"`
-	RootFolder     string
+	SysLogIP   string `json:"syslog_server"`
+	RootFolder string
 }
 
+// Config is a global instance of the config
 var Config ConfigStruct
 
+// LoadConfig load the config file from the given folder
 func LoadConfig(config string, rootfolder string) error {
 	fmt.Println("Loading Config: ", config)
 

@@ -1,0 +1,9 @@
+build:
+	go build -o <%= application_name %> ./main.go
+
+run: build
+	./<%= application_name %> ./config.json /
+
+test:
+	go test -v -race $(shell go list ./... | grep -v /vendor/)
+

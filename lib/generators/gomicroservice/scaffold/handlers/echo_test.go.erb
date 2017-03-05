@@ -1,74 +1,37 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"log"
-	"os"
-	"github.com/facebookgo/inject"
-	"github.com/gorilla/context"
+
+	log "github.com/Sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"<%= namespace %>/<%= application_name %>/mocks"
 )
 
-var echoStatsDMock *mocks.MockStatsD
-
-func echoTestSetup(t *testing.T) {
-	// create an injection graph containing the mocked elements we wish to replace
-
-	var g inject.Graph
-
-	echoStatsDMock = &mocks.MockStatsD{}
-	EchoDependencies = &EchoDependenciesContainer{}
-
-	err := g.Provide(
-		&inject.Object{Value: EchoDependencies},
-		&inject.Object{Value: echoStatsDMock, Name: "statsd"},
-		&inject.Object{Value: log.New(os.Stdout, "tester", log.Lshortfile)},
-	)
-
-	if err != nil {
-		fmt.Println(err)
+func echoTestSetup(t *testing.T) http.Handler {
+	deps := echoHandlerDependencies{
+		logger: &log.Logger{},
 	}
 
-	if err := g.Populate(); err != nil {
-		fmt.Println(err)
-	}
-
-	echoStatsDMock.Mock.On("Increment", mock.Anything).Return()
-}
-
-func TestEchoHandlerSetStats(t *testing.T) {
-	echoTestSetup(t)
-
-	var responseRecorder httptest.ResponseRecorder
-	var request http.Request
-
-	echo := Echo{Echo: "Hello World"}
-	context.Set(&request, "request", &echo)
-
-	EchoHandler(&responseRecorder, &request)
-
-	echoStatsDMock.Mock.AssertCalled(t, "Increment", ECHO_HANDLER+POST+CALLED)
-	echoStatsDMock.Mock.AssertCalled(t, "Increment", ECHO_HANDLER+POST+SUCCESS)
+	return newEchoHandler(deps)
 }
 
 func TestEchoHandlerCorrectlyEchosResponse(t *testing.T) {
-	echoTestSetup(t)
+	h := echoTestSetup(t)
 
 	var responseRecorder *httptest.ResponseRecorder
-	var request http.Request
+	r := httptest.NewRequest("POST", "/echo", nil)
 
 	responseRecorder = httptest.NewRecorder()
 
 	echo := Echo{Echo: "Hello World"}
-	context.Set(&request, "request", &echo)
+	c := context.WithValue(context.Background(), validationRequestKey{}, echo)
+	r = r.WithContext(c)
 
-	EchoHandler(responseRecorder, &request)
+	h.ServeHTTP(responseRecorder, r)
 
 	body := responseRecorder.Body.Bytes()
 	response := Echo{}

@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  registrator:
+    image: 'gliderlabs/registrator:latest'
+    command: '-internal -tags=dev consul://consul:8500'
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock'
+  syslog:
+    image: 'factorish/syslog'
+    command: '-t udp'
+    environment:
+      - "SERVICE_514_NAME=syslog-514"

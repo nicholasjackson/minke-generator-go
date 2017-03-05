@@ -21,9 +21,6 @@ build:
       -
         from: '../<%= application_name %>'
         to: './dockerfile/<%= application_name %>'
-      -
-        from: './swagger_spec/swagger.yml'
-        to: './dockerfile/<%= application_name %>/swagger_spec'
 run:
   consul_loader:
     config_file: './consul_keys.yml'
@@ -43,3 +40,15 @@ cucumber:
     port: 8001
     path: /v1/health
     type: bridge
+shell:
+  consul_loader:
+    config_file: './consul_keys.yml'
+    url:
+      address: consul
+      port: 8500
+      type: bridge
+  docker:
+    application_docker_file: './dockerfile/<%= application_name %>/'
+    application_compose_file: './dockercompose/<%= application_name %>/docker-compose-no-server.yml'
+  ports:
+    - "8001:8001"

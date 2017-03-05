@@ -2,38 +2,37 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"log"
 
-	"github.com/gorilla/context"
-	"<%= namespace %>/<%= application_name %>/logging"
+	log "github.com/Sirupsen/logrus"
 )
 
-type EchoDependenciesContainer struct {
-	StatsD logging.StatsD `inject:"statsd"`
-	Log    *log.Logger    `inject:""`
+const kTagEcho = "EchoHandler"
+
+type echoHandlerDependencies struct {
+	logger *log.Logger
 }
 
-var EchoDependencies *EchoDependenciesContainer = &EchoDependenciesContainer{}
-const EHTAGNAME = "EchoHandler: "
-
-// use the validation middleware to automatically validate input
+// Echo uses the validation middleware to automatically validate input
 // github.com/asaskevich/govalidator
 type Echo struct {
 	Echo string `json:"echo" valid:"stringlength(1|255),required"`
 }
 
-func EchoHandler(rw http.ResponseWriter, r *http.Request) {
-	EchoDependencies.StatsD.Increment(ECHO_HANDLER + POST + CALLED)
-	EchoDependencies.Log.Printf("%v Called GET\n", EHTAGNAME)
+type echoHandler struct {
+	deps echoHandlerDependencies
+}
+
+func (e *echoHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	e.deps.logger.WithField(kTagEcho, "Called GET")
 
 	// request is set into the context from the middleware
-	request := context.Get(r, "request").(*Echo)
-	fmt.Println("r: ", request)
+	request := r.Context().Value(validationRequestKey{}).(Echo)
 
 	encoder := json.NewEncoder(rw)
 	encoder.Encode(request)
+}
 
-	EchoDependencies.StatsD.Increment(ECHO_HANDLER + POST + SUCCESS)
+func newEchoHandler(deps echoHandlerDependencies) http.Handler {
+	return &echoHandler{deps}
 }

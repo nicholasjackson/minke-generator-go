@@ -1,34 +1,24 @@
 package handlers
 
 import (
-	"net/http"
 	"reflect"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/pat"
-	"<%= namespace %>/<%= application_name %>/logging"
 )
 
-type RouterDependenciesContainer struct {
-	StatsD logging.StatsD `inject:"statsd"`
-}
-
-var RouterDependencies *RouterDependenciesContainer = &RouterDependenciesContainer{}
-
-func GetRouter() *pat.Router {
+func GetRouter(logger *log.Logger) *pat.Router {
 	r := pat.New()
 
-	r.Get("/v1/health", HealthHandler)
-
-	r.Add("POST", "/v1/echo", requestValidationHandler(
-		ECHO_HANDLER+POST,
+	echoHandler := newEchoHandler(echoHandlerDependencies{logger})
+	healthHandler := newHealthHandler(healthHandlerDependencies{logger})
+	validationHandler := newRequestValidationHandler(
+		requestValidationDependencies{logger},
 		reflect.TypeOf(Echo{}),
-		RouterDependencies.StatsD,
-		http.HandlerFunc(EchoHandler),
-	))
+		echoHandler)
 
-	//Add routing for static routes
-	s := http.StripPrefix("/swagger/", http.FileServer(http.Dir("/swagger")))
-	r.PathPrefix("/swagger/").Handler(s)
+	r.Add("GET", "/v1/health", healthHandler)
+	r.Add("POST", "/v1/echo", validationHandler)
 
 	return r
 }

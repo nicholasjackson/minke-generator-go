@@ -1,0 +1,3 @@
+#!/bin/sh
+
+consul-template -consul $CONSUL -exec-reload-signal=SIGTERM -template /<%= application_name %>/config.ctmpl:/<%= application_name %>/config.json -exec "/<%= application_name %>/<%= application_name %> /<%= application_name %>/config.json /"

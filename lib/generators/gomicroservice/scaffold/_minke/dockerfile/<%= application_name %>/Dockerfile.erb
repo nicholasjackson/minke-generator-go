@@ -5,19 +5,16 @@ EXPOSE 8001
 # Create directory for server files
 RUN mkdir /<%= application_name %>
 
-# Add s6 config
-ADD s6-etc /etc/s6
-RUN chmod -R 755 /etc/s6; \
-chmod -R 755 /etc/s6
 
 # Add consul template
 ADD config.ctmpl /<%= application_name %>/config.ctmpl
+ADD entrypoint.sh /entrypoint.sh
 
 # Add server files
-ADD swagger_spec /swagger
-ADD <%= application_name %> /<%= application_name %>/<%= application_name %>
+ADD testapp /<%= application_name %>/<%= application_name %>
 
 RUN chmod 755 /<%= application_name %>/<%= application_name %>
+RUN chmod 755 /entrypoint.sh
 
-ENTRYPOINT ["/usr/bin/s6-svscan","/etc/s6"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD []

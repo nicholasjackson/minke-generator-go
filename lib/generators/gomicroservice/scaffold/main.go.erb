@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log/syslog"
 	"net/http"
 	"os"
-	"log"
-	"log/syslog"
+
+	log "github.com/Sirupsen/logrus"
+	logrus_syslog "github.com/Sirupsen/logrus/hooks/syslog"
 	"<%= namespace %>/<%= application_name %>/global"
 	"<%= namespace %>/<%= application_name %>/handlers"
-
-	"github.com/facebookgo/inject"
-	"github.com/alexcesaro/statsd"
 )
 
 func main() {
@@ -19,50 +18,20 @@ func main() {
 
 	global.LoadConfig(config, rootfolder)
 
-	setupInjection()
 	setupHandlers()
 }
 
 func setupHandlers() {
-	http.Handle("/", handlers.GetRouter())
+	logger := log.New()
+	hook, err := logrus_syslog.NewSyslogHook("udp", global.Config.SysLogIP, syslog.LOG_DEBUG, "")
+	if err != nil {
+		log.Fatal("Unable to create sylogger")
+	}
+
+	logger.Hooks.Add(hook)
+
+	http.Handle("/", handlers.GetRouter(logger))
 
 	fmt.Println("Listening for connections on port", 8001)
 	http.ListenAndServe(fmt.Sprintf(":%v", 8001), nil)
-}
-
-func setupInjection() {
-	var g inject.Graph
-
-	var err error
-
-	statsdClient, err := statsd.New(statsd.Address(global.Config.StatsDServerIP)) // reference to a statsd client
-	if err != nil {
-		panic(fmt.Sprintln("Unable to create StatsD Client: ", err))
-	}
-
-	syslogWriter, err := syslog.Dial("udp", global.Config.SysLogIP, syslog.LOG_SYSLOG, "sorcery")
-	if err != nil {
-		panic(fmt.Sprintln("Unable to connect to syslog: ", err))
-	}
-
-	logWriter := log.New(syslogWriter, "<%= application_name %>: ", log.Lshortfile)
-
-	err = g.Provide(
-		&inject.Object{Value: handlers.RouterDependencies},
-		&inject.Object{Value: handlers.HealthDependencies},
-		&inject.Object{Value: handlers.EchoDependencies},
-		&inject.Object{Value: statsdClient, Name: "statsd"},
-		&inject.Object{Value: logWriter},
-	)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Here the Populate call is creating instances of NameAPI &
-	// PlanetAPI, and setting the HTTPTransport on both to the
-	// http.DefaultTransport provided above:
-	if err := g.Populate(); err != nil {
-		fmt.Println(err)
-	}
 }

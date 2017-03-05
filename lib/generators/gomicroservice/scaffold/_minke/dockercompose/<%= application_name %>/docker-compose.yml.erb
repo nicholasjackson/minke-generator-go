@@ -1,14 +1,14 @@
 version: '2'
 
 services:
-  statsd:
-    image: 'hopsoft/graphite-statsd:latest'
+  <%= application_name %>:
+    image: <%= application_name %>
     ports:
-      - "::80"
-    expose:
-      - "8125/udp"
+      - "::8001"
     environment:
-      - "SERVICE_8125_NAME=statsd-8125"
+      - "CONSUL=consul:8500"
+    links:
+      - syslog:syslog
   registrator:
     image: 'gliderlabs/registrator:latest'
     command: '-internal -tags=dev consul://consul:8500'
