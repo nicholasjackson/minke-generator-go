@@ -1,3 +1,3 @@
 {
-  "syslog_server": "syslog_server:514"
+  "syslog_server": "syslog:514"
 }
