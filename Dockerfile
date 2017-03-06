@@ -6,6 +6,7 @@ RUN apk update && \
     apk add git && \
     apk add openssh-client && \
     apk add make
+    apk add bzr
 
 # install Glide
 RUN go get -u github.com/Masterminds/glide
